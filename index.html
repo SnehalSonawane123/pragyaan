@@ -1,12 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My GitHub Page</title>
-</head>
-<body>
-    <h1>Welcome to My GitHub Page!</h1>
-    <p>This is a test page.</p>
-</body>
-</html>
+<form action="https://secure.payu.in/_payment" method="post">
+    <input type="hidden" name="key" value="YOUR_MERCHANT_KEY">
+    <input type="hidden" name="txnid" value="TXN123456"> 
+    <input type="hidden" name="amount" value="10">
+    <input type="hidden" name="productinfo" value="Sample Product">
+    <input type="hidden" name="firstname" value="Snehal">
+    <input type="hidden" name="email" value="snehal@example.com">
+    <input type="hidden" name="phone" value="9876543210">
+    <input type="hidden" name="surl" value="http://yourwebsite.com/success">
+    <input type="hidden" name="furl" value="http://yourwebsite.com/failure">
+    <input type="hidden" name="service_provider" value="payu_paisa">
+    <button type="submit">Pay Now</button>
+</form>
