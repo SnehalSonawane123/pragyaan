@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script> <!-- Razorpay Script -->
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #c2a37d; color: #2e1d0e; margin: 0; padding: 0; }
+        .checkout-container { max-width: 600px; margin: 40px auto; background: #f3e2c5; padding: 20px; border-radius: 10px; box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2); text-align: center; }
+        .button { background: #774936; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; }
+        .button:hover { background: #5a3d2b; }
+        input, select { width: 90%; padding: 10px; margin-top: 10px; border-radius: 5px; border: 1px solid #774936; }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <h2>Checkout</h2>
+        <p>Total Amount: ₹<span id="checkout-total">0</span></p>
+        
+        <h3>Billing Details</h3>
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="text" id="address" placeholder="Shipping Address" required>
+        <input type="text" id="phone" placeholder="Phone Number" required>
+        
+        <select id="payment-method">
+            <option value="">Select Payment Method</option>
+            <option value="cod">Cash on Delivery</option>
+            <option value="upi">UPI</option>
+            <option value="card">Credit/Debit Card</option>
+        </select>
+        
+        <button class="button" onclick="placeOrder()">PLACE ORDER</button>
+    </div>
+
+    <script>
+        let totalAmount = localStorage.getItem("totalPrice") || 0;
+        document.getElementById("checkout-total").innerText = totalAmount;
+
+        function placeOrder() {
+            let name = document.getElementById("name").value;
+            let address = document.getElementById("address").value;
+            let phone = document.getElementById("phone").value;
+            let paymentMethod = document.getElementById("payment-method").value;
+
+            if (!name || !address || !phone || !paymentMethod) {
+                alert("Please fill in all the details.");
+                return;
+            }
+
+            if (paymentMethod === "cod") {
+                alert("Order placed successfully! Thank you for shopping.");
+                localStorage.removeItem("cart");
+                localStorage.removeItem("totalPrice");
+            } else {
+                initiateRazorpayPayment(name, phone, totalAmount);
+            }
+        }
+
+        function initiateRazorpayPayment(name, phone, amount) {
+            let options = {
+                "key": "YOUR_RAZORPAY_KEY", // Replace with your Razorpay Key
+                "amount": amount * 100, // Razorpay takes amount in paise
+                "currency": "INR",
+                "name": "Your Store Name",
+                "description": "Order Payment",
+                "image": "your-logo-url", // Optional: Add your logo URL
+                "handler": function (response) {
+                    alert("Payment successful! Order placed.");
+                    localStorage.removeItem("cart");
+                    localStorage.removeItem("totalPrice");
+                },
+                "prefill": {
+                    "name": name,
+                    "email": "customer@example.com",
+                    "contact": phone
+                },
+                "theme": {
+                    "color": "#774936"
+                }
+            };
+            let rzp = new Razorpay(options);
+            rzp.open();
+        }
+    </script>
+</body>
+</html>
